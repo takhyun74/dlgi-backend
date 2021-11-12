@@ -34,6 +34,8 @@ const Sequelize = require("sequelize");
 //   // },
 // });
 
+//git test
+
 //sqllite3
 const sequelize = new Sequelize({
   dialect: 'sqlite',
