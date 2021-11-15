@@ -50,20 +50,24 @@ db.sequelize = sequelize;
 /**
  * ORM Mapping.
  */
-db.tutorial = require("./tutorial/model.js")(sequelize, Sequelize);
-db.user = require("./user/model.js")(sequelize, Sequelize);
+db.tutorial = require("./models/tutorial.js")(sequelize, Sequelize);
+db.user = require("./models/user.js")(sequelize, Sequelize);
 
 module.exports = db;
 
 // drop and re-sync db the table if it already exists ==> force : true
-sequelize.sync({ force: false,   /* logging: false */ }).then(() => {
+sequelize.sync({ force: false, /* logging: false */ }).then(() => {
 });
 
 /**
  * Routes.
  */
-require("./tutorial/route")(app);
-require("./user/route")(app);
+require("./routes/login")(app);
+require("./routes/user")(app);
+require("./routes/tutorial")(app);
+
+
+
 
 // set port, listen for requests
 //const PORT = process.env.PORT || 8080;
