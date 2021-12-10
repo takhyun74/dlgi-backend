@@ -3,7 +3,8 @@ const jwt = require('jsonwebtoken');
 const redisClient = require('./redis.js');
 
 const secretKey = require("./secretKey").secretKey;
-const options = require("./secretKey").options;
+const accessTokenOption = require("./secretKey").accessTokenOption;
+const refreshTokenOption = require("./secretKey").refreshTokenOption;
 
 module.exports = {
   sign: (user) => {
@@ -12,12 +13,12 @@ module.exports = {
       authority: user.code_auth,
     };
     
-    return jwt.sign(payload, secretKey, options);
+    return jwt.sign(payload, secretKey, accessTokenOption);
   },
   verify: (token) => {
     let decoded = null;
     try {
-      decoded = jwt.verify(token, secretKey, options);
+      decoded = jwt.verify(token, secretKey);
 
       return {
         ok: true,
@@ -32,10 +33,7 @@ module.exports = {
     }
   },
   refresh: () => {
-    return jwt.sign({}, secretKey, { 
-      algorithm: 'HS256',
-      expiresIn: '14d',
-    });
+    return jwt.sign({}, secretKey, refreshTokenOption);
   },
   refreshVerify: async (token, userId) => {
     const getAsync = promisify(redisClient.get).bind(redisClient);
