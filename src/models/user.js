@@ -1,38 +1,49 @@
 
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define("user", {
-    id: {
-      type: DataTypes.STRING,
+  const User = sequelize.define("tbl_user", {
+    user_id: {
+      type: DataTypes.STRING(255),
       primaryKey: true,
       unique: true
-      //autoIncrement: true,
     },
-    // email: {
-    //   type: DataTypes.STRING(100),
-    //   //validate: {
-    //   //  isEmail: true,
-    //   //},
-    // },
+    name: {
+      type: DataTypes.STRING(100),
+      allowNull: false
+    },
     password: {
       type: DataTypes.STRING,
       allowNull: false
     },
-    name: {
+    email: {
       type: DataTypes.STRING(100),
+      allowNull: false,
+      validate: {
+        isEmail: true,
+      },
     },
-    // phone: {
-    //   type: DataTypes.STRING(13),
-    //   allowNull: false
-    // },
-    // updateDt: {
-    //   type: DataTypes.DATE
-    // },
-    // createDt: {
-    //   type: DataTypes.DATE
-    // }
+    mobile: {
+      type: DataTypes.STRING(13),
+      allowNull: false
+    },
+    crewYN: {
+      type: DataTypes.CHAR(1),
+      allowNull: false
+    },
+    last_login: {
+      type: DataTypes.DATE
+    },
+    updateDt: {
+      type: DataTypes.DATE,
+      allowNull: false
+    },
+    createDt: {
+      type: DataTypes.DATE
+    }
   }, {
     charset: "utf8",
-    timestamps: false,
+    timestamps: true,
+    createdAt: false,
+    updatedAt: false
   });
 
   return User;

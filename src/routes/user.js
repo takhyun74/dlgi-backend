@@ -1,15 +1,18 @@
+
+//const authUtil = require("../middlewares/authJWT.js").checkToken;
+const router = require("express").Router();
+
 module.exports = (app) => {
-  const userController = require("../controllers/user.js");
+  var controller = require("../controllers/user.js");
 
-  var router = require("express").Router();
-
-  router.post("/", userController.create);
-  router.get("/", userController.findAll);
-  router.get("/:id", userController.findOne);
-  router.get("/published", userController.findAllPublished);
-  router.put("/:id", userController.update);
-  router.delete("/", userController.deleteAll);
-  router.delete("/:id", userController.delete);
+  //router.post("/", authUtil, controller.create);
+  router.post("/", controller.create);
+  router.get("/", controller.findAll);
+  router.get("/:id", controller.findOne);
+  //router.get("/published", controller.findAllPublished);
+  router.put("/:id", controller.update);
+  router.delete("/", controller.deleteAll);
+  router.delete("/:id", controller.delete);
 
   app.use("/api/user", router);
 };

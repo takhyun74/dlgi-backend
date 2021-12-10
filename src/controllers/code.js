@@ -1,6 +1,5 @@
 const db = require("../index.js");
 const User = db.user;
-
 const Op = db.Sequelize.Op;
 
 const bcrypt = require('bcrypt');

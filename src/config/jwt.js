@@ -1,35 +1,59 @@
-const randToken = require("rand-token");
-const jwt = require("jsonwebtoken");
+const { promisify } = require('util');
+const jwt = require('jsonwebtoken');
+const redisClient = require('./redis.js');
+
 const secretKey = require("./secretKey").secretKey;
 const options = require("./secretKey").options;
-const TOKEN_EXPIRED = -3;
-const TOKEN_INVALID = -2;
 
 module.exports = {
   sign: (user) => {
     const payload = {
-      id: user.id,
-      password: user.password,
+      user_id: user.user_id,
+      authority: user.code_auth,
     };
-    const result = {
-      token: jwt.sign(payload, secretKey, options),
-      refreshToken: randToken.uid(256),
-    };
-    return result;
+    
+    return jwt.sign(payload, secretKey, options);
   },
   verify: (token) => {
-    let decoded;
+    let decoded = null;
     try {
-      decoded = jwt.verify(token, secretKey);
+      decoded = jwt.verify(token, secretKey, options);
+
+      return {
+        ok: true,
+        id: decoded.user_id,
+        authority: decoded.authority,
+      };
     } catch (err) {
-      if (err.message === "jwt expired") {
-        return TOKEN_EXPIRED;
-      } else if (err.message === "invalid token") {
-        return TOKEN_INVALID;
-      } else {
-        return TOKEN_INVALID;
-      }
+      return {
+        ok: false,
+        message: err.message,
+      };
     }
-    return decoded;
   },
+  refresh: () => {
+    return jwt.sign({}, secretKey, { 
+      algorithm: 'HS256',
+      expiresIn: '14d',
+    });
+  },
+  refreshVerify: async (token, userId) => {
+    const getAsync = promisify(redisClient.get).bind(redisClient);
+    try {
+      const data = await getAsync(userId);
+
+      if (token === data) {
+        try {
+          jwt.verify(token, secretKey);
+          return true;
+        } catch (err) {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    } catch (err) {
+      return false;
+    }
+  }
 };

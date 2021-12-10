@@ -1,6 +1,5 @@
 const db = require("../index.js");
 const Tutorial = db.tutorial;
-const Op = db.Sequelize.Op;
 
 exports.create = (req, res) => {
   // Validate request
@@ -33,7 +32,7 @@ exports.create = (req, res) => {
 exports.findAll = (req, res) => {
   const title = req.query.title;
 
-  var condition = title ? { title: { [Op.like]: '%${title}%' } } : null;
+  var condition = title ? { title: { [db.Sequelize.Op.like]: '%${title}%' } } : null;
 
   Tutorial.findAll({ where: condition })
     .then((data) => {
