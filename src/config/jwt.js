@@ -2,9 +2,7 @@ const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const redisClient = require('./redis.js');
 
-const secretKey = require("./secretKey").secretKey;
-const accessTokenOption = require("./secretKey").accessTokenOption;
-const refreshTokenOption = require("./secretKey").refreshTokenOption;
+const { secretKey, accessTokenOption, refreshTokenOption } = require("./secretKey");
 
 module.exports = {
   sign: (user) => {
