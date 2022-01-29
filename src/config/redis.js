@@ -11,7 +11,6 @@ redisClient.on('connection', () => {
 });
 
 redisClient.on('error', err => {
-  console.log("test");
   console.log('Error ' + err);
 });
 

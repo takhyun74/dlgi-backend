@@ -3,13 +3,13 @@ module.exports = {
   accessTokenOption : {
       algorithm : "HS256",
       //expiresIn: '1h',
-      expiresIn : "5s",
+      expiresIn : "30s",
       issuer : "thkim"
   },
   refreshTokenOption : {
     algorithm : "HS256",
-    expiresIn: '1h',
+    expiresIn: '1m',
     //expiresIn: '14d',
     issuer : "thkim"
-}
+  }
 }
